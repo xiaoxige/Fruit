@@ -33,6 +33,7 @@ public class FruitAdapter extends FruitView.Adapter {
     @Override
     public void onBindViewHolder(FruitView.ViewHolder holder, int position) {
         ((ViewHolder) holder).bindData(position);
+        ((ViewHolder) holder).registerListener(position);
     }
 
 
@@ -46,6 +47,15 @@ public class FruitAdapter extends FruitView.Adapter {
 
         public void bindData(int position) {
             tvMsg.setText(position + "");
+        }
+
+        public void registerListener(final int position) {
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FruitAdapter.this.notifyItemRemoved(position);
+                }
+            });
         }
     }
 

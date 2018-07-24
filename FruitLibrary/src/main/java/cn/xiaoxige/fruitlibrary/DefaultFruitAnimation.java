@@ -32,6 +32,13 @@ public class DefaultFruitAnimation implements FruitView.FruitAnimator {
 
     @Override
     public Animator quit(View view) {
+        ObjectAnimator quitAlphaAnimator = ObjectAnimator.ofFloat(view, "alpha", 1f, 0f);
+        ObjectAnimator quitScaleXAnimator = ObjectAnimator.ofFloat(view, "scaleX", 1f, 0f);
+        ObjectAnimator quitScaleYAnimator = ObjectAnimator.ofFloat(view, "scaleY", 1f, 0f);
+        ObjectAnimator quitTranslateAnimator = ObjectAnimator.ofFloat(view, "translationY", 0f, -view.getTop());
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.setDuration(2000);
+        animatorSet.play(quitAlphaAnimator).with(quitScaleXAnimator).with(quitScaleYAnimator).with(quitTranslateAnimator);
         return null;
     }
 

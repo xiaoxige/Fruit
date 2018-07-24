@@ -8,6 +8,7 @@ import android.support.v4.util.ArrayMap;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -203,8 +204,7 @@ public class FruitView extends ViewGroup {
             if (viewHolders == null) {
                 viewHolders = new ArrayList<>();
             }
-            if (viewHolders.size() > mMaxCache) {
-                holder.reset();
+            if (viewHolders.size() <= mMaxCache) {
                 viewHolders.add(holder);
             }
         }
@@ -279,7 +279,7 @@ public class FruitView extends ViewGroup {
         @Override
         void onDelData(int position) {
             super.onDelData(position);
-            final View view = mFruit.findViewByPosition(position);
+            final View view = getChildAt(position);
             if (view == null) {
                 return;
             }
@@ -293,6 +293,7 @@ public class FruitView extends ViewGroup {
                             removeView(view);
                         }
                     });
+                    quit.start();
                 } else {
                     removeView(view);
                 }
@@ -310,6 +311,12 @@ public class FruitView extends ViewGroup {
         }
 
         public void reset() {
+            ViewParent parent = itemView.getParent();
+            if (parent != null) {
+                if (parent instanceof ViewGroup) {
+                    ((ViewGroup) parent).removeView(itemView);
+                }
+            }
         }
     }
 
