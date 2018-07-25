@@ -17,6 +17,9 @@ public class MainActivity extends Activity {
     private FruitView fruitView;
     private FruitAdapter mAdapter;
     private Button btnTest;
+    private Button btnAdd;
+
+    private int index = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +28,7 @@ public class MainActivity extends Activity {
 
         fruitView = (FruitView) findViewById(R.id.fruitView);
         btnTest = (Button) findViewById(R.id.btnTest);
+        btnAdd = (Button) findViewById(R.id.btnAdd);
 
         mAdapter = new FruitAdapter(this);
 
@@ -39,11 +43,18 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 List<Object> objects = new ArrayList<>();
-                for (int i = 0; i < 11; i++) {
+                for (int i = 0; i < 5; i++) {
                     objects.add(i);
                 }
 
                 mAdapter.setData(objects);
+            }
+        });
+
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAdapter.addData(index++);
             }
         });
     }
