@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cn.xiaoxige.fruitlibrary.DefaultFruitAnimation;
 import cn.xiaoxige.fruitlibrary.DefaultFruitLayoutManager;
 import cn.xiaoxige.fruitlibrary.FruitView;
@@ -28,14 +31,19 @@ public class MainActivity extends Activity {
 
         fruitView.setLayoutManager(new DefaultFruitLayoutManager());
         fruitView.setFruitAnimation(new DefaultFruitAnimation(this));
-        fruitView.setAdapter(mAdapter);
 
+        fruitView.setAdapter(mAdapter);
 
 
         btnTest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                List<Object> objects = new ArrayList<>();
+                for (int i = 0; i < 11; i++) {
+                    objects.add(i);
+                }
 
+                mAdapter.setData(objects);
             }
         });
     }

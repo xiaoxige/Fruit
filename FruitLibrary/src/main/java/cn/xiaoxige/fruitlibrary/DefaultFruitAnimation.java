@@ -7,6 +7,8 @@ import android.content.Context;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 
+import java.util.Random;
+
 /**
  * @author by zhuxiaoan on 2018/7/24 0024.
  */
@@ -45,7 +47,7 @@ public class DefaultFruitAnimation implements FruitView.FruitAnimator {
     @Override
     public Animator hover(View view) {
         ObjectAnimator viewTranslateAnimator = ObjectAnimator.ofFloat(view, "translationY", 0, -5, -10, -5, 0, 5, 10, 5);
-        viewTranslateAnimator.setDuration(1000);
+        viewTranslateAnimator.setDuration(new Random().nextInt(100) + 1500);
         viewTranslateAnimator.setRepeatCount(-1);
         viewTranslateAnimator.setInterpolator(new LinearInterpolator());
         return viewTranslateAnimator;

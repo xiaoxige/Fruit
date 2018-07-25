@@ -6,6 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cn.xiaoxige.fruitlibrary.FruitView;
 
 /**
@@ -16,13 +19,20 @@ public class FruitAdapter extends FruitView.Adapter {
 
     private Context mContext;
 
+    private List<Object> objects = new ArrayList<>();
+
     public FruitAdapter(Context context) {
         this.mContext = context;
     }
 
+    public void setData(List<Object> data) {
+        this.objects = data;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {
-        return 100;
+        return objects.size();
     }
 
     @Override
@@ -32,8 +42,9 @@ public class FruitAdapter extends FruitView.Adapter {
 
     @Override
     public void onBindViewHolder(FruitView.ViewHolder holder, int position) {
-        ((ViewHolder) holder).bindData(position);
+//        ((ViewHolder) holder).bindData(position);
         ((ViewHolder) holder).registerListener(position);
+//        Log.e("TAG", "position = " + position);
     }
 
 
@@ -46,13 +57,15 @@ public class FruitAdapter extends FruitView.Adapter {
         }
 
         public void bindData(int position) {
-            tvMsg.setText(position + "");
+            tvMsg.setText("小稀革");
         }
 
         public void registerListener(final int position) {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    objects.remove(position);
+                    FruitAdapter.this.notifyItemRemoved(position);
                 }
             });
         }
