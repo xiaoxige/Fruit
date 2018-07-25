@@ -5,6 +5,8 @@ import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.database.Observable;
 import android.graphics.Point;
+import android.graphics.PointF;
+import android.graphics.Rect;
 import android.support.v4.util.ArrayMap;
 import android.util.AttributeSet;
 import android.view.View;
@@ -21,6 +23,11 @@ import java.util.Random;
  */
 
 public class FruitView extends ViewGroup {
+
+    /**
+     * Maximum disjoint search times
+     */
+    private static final int TRY_MAX_FIND_DISJOINT_FREQUENCY = 500;
 
     private Context mContext;
 
@@ -230,15 +237,86 @@ public class FruitView extends ViewGroup {
                 int effectiveWidth = mFruitViewWidth - itemView.getMeasuredWidth() - itemView.getPaddingLeft() - itemView.getPaddingRight();
                 int effectiveHeight = mFruitViewHeight - itemView.getMeasuredHeight() - itemView.getPaddingTop() - itemView.getPaddingBottom();
 
-                int x = new Random().nextInt(effectiveWidth);
-                int y = new Random().nextInt(effectiveHeight);
-                point = new Point(x, y);
+                point = tryCreateDisjointPosint(itemView, effectiveWidth, effectiveHeight);
             }
 
 
             return point;
         }
 
+        private Point tryCreateDisjointPosint(View itemView, int effectiveWidth, int effectiveHeight) {
+
+            Point point = null;
+            // Try to find five times
+            for (int i = 0; i < TRY_MAX_FIND_DISJOINT_FREQUENCY; i++) {
+                int x = new Random().nextInt(effectiveWidth);
+                int y = new Random().nextInt(effectiveHeight);
+                Rect itemViewRect = new Rect(x, y, x + itemView.getMeasuredWidth(), y + itemView.getMeasuredHeight());
+                if (isDisjoint(itemViewRect)) {
+                    point = new Point(x, y);
+                    break;
+                }
+            }
+
+            // Standard of reduction
+            if (point == null) {
+                for (int i = 0; i < TRY_MAX_FIND_DISJOINT_FREQUENCY; i++) {
+                    int x = new Random().nextInt(effectiveWidth);
+                    int y = new Random().nextInt(effectiveHeight);
+                    if (isReduceTheCoincidence(x, y)) {
+                        point = new Point(x, y);
+                        break;
+                    }
+                }
+            }
+
+            // forehead
+            if (point == null) {
+                int x = new Random().nextInt(effectiveWidth);
+                int y = new Random().nextInt(effectiveHeight);
+                point = new Point(x, y);
+            }
+
+            return point;
+        }
+
+        private boolean isDisjoint(Rect rect) {
+            int size = mAttachedScrap.size();
+            if (size <= 0) {
+                return true;
+            }
+            Rect childRect = new Rect();
+            for (int i = 0; i < size; i++) {
+                ViewHolder viewHolder = mAttachedScrap.get(i);
+                View itemView = viewHolder.itemView;
+
+                childRect.set(viewHolder.position.x, viewHolder.position.y,
+                        viewHolder.position.x + itemView.getMeasuredWidth(),
+                        viewHolder.position.y + itemView.getMeasuredHeight());
+
+                PointF c1 = new PointF(rect.left + rect.width() / 2.0f, rect.top + rect.height() / 2.0f);
+                PointF c2 = new PointF(childRect.left + childRect.width() / 2.0f, childRect.top + childRect.height() / 2.0f);
+                if ((Math.abs(c1.x - c2.x) <= rect.width() / 2.0 + childRect.width() / 2.0 && Math.abs(c2.y - c1.y) <= rect.height() / 2.0 + childRect.height() / 2.0)) {
+                    return false;
+                }
+
+            }
+            return true;
+        }
+
+        private boolean isReduceTheCoincidence(int x, int y) {
+            int size = mAttachedScrap.size();
+            if (size <= 0) {
+                return true;
+            }
+            for (int i = 0; i < size; i++) {
+                ViewHolder viewHolder = mAttachedScrap.get(i);
+                if (x == viewHolder.position.x && y == viewHolder.position.y) {
+                    return false;
+                }
+            }
+            return true;
+        }
 
     }
 
