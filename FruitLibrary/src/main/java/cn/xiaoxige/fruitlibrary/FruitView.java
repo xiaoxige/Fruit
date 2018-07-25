@@ -225,7 +225,6 @@ public class FruitView extends ViewGroup {
                 View itemView = viewHolder.itemView;
                 if (!viewHolder.isAreadyMeasure) {
                     measureChild(itemView, 0, 0);
-                    viewHolder.isAreadyMeasure ^= true;
                 }
 
                 int effectiveWidth = mFruitViewWidth - itemView.getMeasuredWidth() - itemView.getPaddingLeft() - itemView.getPaddingRight();
@@ -331,7 +330,6 @@ public class FruitView extends ViewGroup {
                         public void onAnimationEnd(Animator animation) {
                             super.onAnimationEnd(animation);
                             removeView(itemView);
-
                         }
                     });
                     quit.start();

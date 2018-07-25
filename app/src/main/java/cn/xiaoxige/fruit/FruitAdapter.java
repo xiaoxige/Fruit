@@ -57,7 +57,7 @@ public class FruitAdapter extends FruitView.Adapter {
         }
 
         public void bindData(int position) {
-            tvMsg.setText("" + position);
+            tvMsg.setText("小稀革" + objects.get(position));
         }
 
         public void registerListener(final int position) {
