@@ -55,6 +55,9 @@ public class FruitAdapter extends FruitView.Adapter {
 //        Log.e("TAG", "position = " + position);
     }
 
+    public List<Object> getObjects() {
+        return objects;
+    }
 
     class ViewHolder extends FruitView.ViewHolder {
         private TextView tvMsg;
@@ -65,15 +68,15 @@ public class FruitAdapter extends FruitView.Adapter {
         }
 
         public void bindData(int position) {
-            int o = (int) objects.get(position);
-            tvMsg.setText("小稀革" + o);
+            TestEntity testEntity = (TestEntity) objects.get(position);
+            tvMsg.setText(testEntity.getName());
         }
 
         public void registerListener(final int position) {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(mContext, "小稀革" + objects.get(position), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, ((TestEntity)objects.get(position)).getName(), Toast.LENGTH_SHORT).show();
                     objects.remove(position);
                     FruitAdapter.this.notifyItemRemoved(position);
                 }

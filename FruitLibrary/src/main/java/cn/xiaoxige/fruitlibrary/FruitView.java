@@ -164,8 +164,10 @@ public class FruitView extends ViewGroup {
         }
 
         void onInvalidData(int position) {
+            ViewHolder viewHolder = mAttachedScrap.get(position);
+            viewHolder.isAreadyMeasure = false;
             //noinspection unchecked
-            mAdapter.onBindViewHolder(mAttachedScrap.get(position), position);
+            mAdapter.onBindViewHolder(viewHolder, position);
         }
 
         void insertItem(int position) {
