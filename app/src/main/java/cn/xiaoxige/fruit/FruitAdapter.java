@@ -53,7 +53,6 @@ public class FruitAdapter extends FruitView.Adapter {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    FruitAdapter.this.notifyItemRemoved(position);
                 }
             });
         }

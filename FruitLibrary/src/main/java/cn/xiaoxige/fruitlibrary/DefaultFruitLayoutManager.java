@@ -12,7 +12,6 @@ public class DefaultFruitLayoutManager extends FruitView.LayoutManager {
 
     @Override
     protected ViewGroup.LayoutParams generateDefaultLayoutParams(Context context) {
-        FruitView.Adapter adapter = mFruitView.getAdapter();
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         return params;
     }
