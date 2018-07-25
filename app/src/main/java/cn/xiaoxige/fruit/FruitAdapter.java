@@ -30,6 +30,12 @@ public class FruitAdapter extends FruitView.Adapter {
         notifyDataSetChanged();
     }
 
+    public void addData(Object o) {
+        this.objects.add(o);
+        notifyItemInserted(this.objects.size() - 1);
+    }
+
+
     @Override
     public int getItemCount() {
         return objects.size();

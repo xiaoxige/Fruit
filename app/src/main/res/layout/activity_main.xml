@@ -7,13 +7,29 @@
     <cn.xiaoxige.fruitlibrary.FruitView
         android:id="@+id/fruitView"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-         />
+        android:layout_height="200dp" />
 
-    <Button
-        android:id="@+id/btnTest"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnTest"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="还原" />
+
+        <Button
+            android:id="@+id/btnAddOne"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="增加一个" />
+
+
+    </LinearLayout>
 
 
 </LinearLayout>

@@ -48,7 +48,7 @@ public class DefaultFruitAnimation implements FruitView.FruitAnimator {
     public Animator hover(View view) {
         ObjectAnimator viewTranslateAnimator = ObjectAnimator.ofFloat(view, "translationY",
                 0, -10, 0, 10, 0);
-        viewTranslateAnimator.setDuration(new Random().nextInt(100) + 1500);
+        viewTranslateAnimator.setDuration(new Random().nextInt(100) + 2000);
         viewTranslateAnimator.setRepeatCount(-1);
         viewTranslateAnimator.setInterpolator(new LinearInterpolator());
         return viewTranslateAnimator;
