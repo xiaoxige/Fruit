@@ -187,6 +187,12 @@ public class FruitView extends ViewGroup {
         }
 
         void onDelData(int position) {
+//            ViewHolder viewHolder = mAttachedScrap.get(position);
+//            if (!viewHolder.isEffective) {
+//                viewHolder.itemView.setOnClickListener(null);
+//                return;
+//            }
+
             ViewHolder holder = mAttachedScrap.remove(position);
             int itemType = holder.itemViewType;
 
@@ -199,6 +205,14 @@ public class FruitView extends ViewGroup {
                 viewHolders.add(holder);
                 holder.reset();
             }
+
+            int size = mAttachedScrap.size();
+            position = Math.max(0, position - 1);
+            for (int i = position; i < size; i++) {
+                //noinspection unchecked
+                mAdapter.onBindViewHolder(mAttachedScrap.get(i), i);
+            }
+
         }
 
         private Point autoDistributionPosition(int position, ViewHolder viewHolder) {
@@ -297,9 +311,9 @@ public class FruitView extends ViewGroup {
 
         void onDelData(int position) {
             ViewHolder viewHolder = mFruit.findViewHolderByPosition(position);
-            if (!viewHolder.isEffective) {
-                return;
-            }
+//            if (!viewHolder.isEffective) {
+//                return;
+//            }
 
             viewHolder.isEffective = false;
 
@@ -317,6 +331,7 @@ public class FruitView extends ViewGroup {
                         public void onAnimationEnd(Animator animation) {
                             super.onAnimationEnd(animation);
                             removeView(itemView);
+
                         }
                     });
                     quit.start();

@@ -1,6 +1,7 @@
 package cn.xiaoxige.fruit;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +27,7 @@ public class FruitAdapter extends FruitView.Adapter {
     }
 
     public void setData(List<Object> data) {
-        this.objects = data;
+        this.objects = (data);
         notifyDataSetChanged();
     }
 
@@ -42,7 +43,7 @@ public class FruitAdapter extends FruitView.Adapter {
 
     @Override
     public void onBindViewHolder(FruitView.ViewHolder holder, int position) {
-//        ((ViewHolder) holder).bindData(position);
+        ((ViewHolder) holder).bindData(position);
         ((ViewHolder) holder).registerListener(position);
 //        Log.e("TAG", "position = " + position);
     }
@@ -57,7 +58,7 @@ public class FruitAdapter extends FruitView.Adapter {
         }
 
         public void bindData(int position) {
-            tvMsg.setText("小稀革");
+            tvMsg.setText("" + position);
         }
 
         public void registerListener(final int position) {
