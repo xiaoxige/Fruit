@@ -51,5 +51,11 @@
 
     </LinearLayout>
 
+    <Button
+        android:id="@+id/btnSimple"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="跳转简易实现" />
+
 
 </LinearLayout>

@@ -21,6 +21,7 @@ public class SimpleViewHolder<T> {
     public int pattern = POSITION_PATTERN_AUTO;
     public Point position;
     public float peakValue;
+    public float stepProgress;
     public float step;
 
 }

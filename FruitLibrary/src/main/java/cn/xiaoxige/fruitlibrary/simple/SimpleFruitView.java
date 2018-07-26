@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -30,7 +31,9 @@ public abstract class SimpleFruitView<T> extends ViewGroup {
 
     private static final int NUM_POLL_TIME = 800;
 
-    private Context mContext;
+    private static final float EACH_STEP = (float) (Math.PI / 180);
+
+    protected Context mContext;
 
     private int mWidth;
     private int mHeight;
@@ -69,6 +72,7 @@ public abstract class SimpleFruitView<T> extends ViewGroup {
             mWidth = MeasureSpec.getSize(widthMeasureSpec);
             mHeight = MeasureSpec.getSize(heightMeasureSpec);
             setMeasuredDimension(widthMeasureSpec, heightMeasureSpec);
+            return;
         }
 
         throw new RuntimeException("The size of the fruit must be clear (the location of the child is random, and the size of the fruit can not be determined after the child).");
@@ -98,19 +102,20 @@ public abstract class SimpleFruitView<T> extends ViewGroup {
         int index = getChildCount();
         for (T data : datas) {
             viewHolder = new SimpleViewHolder<>();
-            view = createFruitView(data);
+            view = createFruitView(this, data);
             viewHolder.t = data;
             viewHolder.isNeedLayout = true;
             viewHolder.pattern = getFruitPattern(index, data);
             viewHolder.peakValue = getPeakValue(index, data);
+            viewHolder.stepProgress = 0;
             viewHolder.step = getStep(index, data);
+
+            handlerAdd(index, data, view);
             viewHolder.position = disjointPosint(viewHolder.pattern, view);
             bindData(view, index, data);
             view.setTag(viewHolder);
 
             registerListener(index, view);
-
-            handlerAdd(index, data, view);
 
             ++index;
         }
@@ -189,8 +194,16 @@ public abstract class SimpleFruitView<T> extends ViewGroup {
             SimpleViewHolder<T> viewHolder = (SimpleViewHolder<T>) view.getTag();
             float peakValue = viewHolder.peakValue;
             float step = viewHolder.step;
-            view.setTranslationY((float) (peakValue * Math.sin(step)));
-            viewHolder.step = (float) Math.min(2 * Math.PI, Math.max(0, (step * 2)));
+            float stepProgress = viewHolder.stepProgress;
+            view.setTranslationY((float) (peakValue * Math.sin( stepProgress)));
+            stepProgress += EACH_STEP;
+            if (stepProgress > 2 * Math.PI) {
+                stepProgress = 0;
+            }
+            viewHolder.stepProgress = stepProgress;
+            if(i == 1){
+                Log.e("TAG", "fdjasfkljdlas = " + stepProgress);
+            }
         }
     }
 
@@ -234,6 +247,9 @@ public abstract class SimpleFruitView<T> extends ViewGroup {
     }
 
     private Point disjointPosint(int pattern, View view) {
+        if (mWidth == 0 || mHeight == 0) {
+            return new Point(0, 0);
+        }
         Point point;
         measureChild(view, 0, 0);
         int viewWidth = view.getMeasuredWidth();
@@ -263,7 +279,7 @@ public abstract class SimpleFruitView<T> extends ViewGroup {
             int x = new Random().nextInt(mWidth);
             int y = new Random().nextInt(mHeight);
             Rect rect = new Rect(x, y, x + viewWidth, y + viewHeight);
-            if (isDisjoint(rect)) {
+            if (isDisjoint(view, rect)) {
                 point = createFruitPoint(x, y, viewWidth, viewHeight);
             }
         }
@@ -289,7 +305,7 @@ public abstract class SimpleFruitView<T> extends ViewGroup {
         return point;
     }
 
-    private boolean isDisjoint(Rect rect) {
+    private boolean isDisjoint(View targetView, Rect rect) {
         int childCount = getChildCount();
         if (childCount <= 0) {
             return true;
@@ -298,7 +314,14 @@ public abstract class SimpleFruitView<T> extends ViewGroup {
         Rect viewRect = new Rect();
         for (int i = 0; i < childCount; i++) {
             view = getChildAt(i);
-            view.getLocalVisibleRect(viewRect);
+            if (targetView == view) {
+                continue;
+            }
+            //noinspection unchecked
+            SimpleViewHolder<T> viewHolder = (SimpleViewHolder<T>) view.getTag();
+            Point position = viewHolder.position;
+
+            viewRect.set(position.x, position.y, position.x + view.getMeasuredWidth(), position.y + view.getMeasuredHeight());
             if (isOverlapping(rect, viewRect)) {
                 return false;
             }
@@ -363,7 +386,7 @@ public abstract class SimpleFruitView<T> extends ViewGroup {
 
     protected abstract void bindData(View view, int index, T data);
 
-    protected abstract View createFruitView(T data);
+    protected abstract View createFruitView(ViewGroup NestedScrollingParent, T data);
 
     protected int getFruitPattern(int index, T data) {
         return SimpleViewHolder.POSITION_PATTERN_AUTO;
@@ -383,7 +406,7 @@ public abstract class SimpleFruitView<T> extends ViewGroup {
         return null;
     }
 
-    private Animator getAddAnimation(int index, T data, View view) {
+    protected Animator getAddAnimation(int index, T data, View view) {
         return null;
     }
 

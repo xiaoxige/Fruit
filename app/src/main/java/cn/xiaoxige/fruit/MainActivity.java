@@ -1,6 +1,7 @@
 package cn.xiaoxige.fruit;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import cn.xiaoxige.fruit.simple.SimpleFruitActivity;
 import cn.xiaoxige.fruitlibrary.complex.DefaultFruitAnimation;
 import cn.xiaoxige.fruitlibrary.complex.DefaultFruitLayoutManager;
 import cn.xiaoxige.fruitlibrary.complex.FruitView;
@@ -22,6 +24,7 @@ public class MainActivity extends Activity {
     private Button btnAdd;
     private Button btnNew5;
     private Button btnChange;
+    private Button btnSimple;
 
     private int index = 100;
 
@@ -36,6 +39,7 @@ public class MainActivity extends Activity {
         btnAdd = (Button) findViewById(R.id.btnAdd);
         btnNew5 = (Button) findViewById(R.id.btnNew5);
         btnChange = (Button) findViewById(R.id.btnChange);
+        btnSimple = (Button) findViewById(R.id.btnSimple);
 
         mAdapter = new FruitAdapter(this);
 
@@ -100,6 +104,13 @@ public class MainActivity extends Activity {
                 mAdapter.notifyItemChanged(i);
 
                 Toast.makeText(MainActivity.this, "修改前为：" + a + "，修改后为：" + testEntity.getName(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        btnSimple.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, SimpleFruitActivity.class));
             }
         });
     }
