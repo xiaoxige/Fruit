@@ -1,7 +1,6 @@
 package cn.xiaoxige.fruit;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,6 +61,16 @@ public class FruitAdapter extends FruitView.Adapter {
     class ViewHolder extends FruitView.ViewHolder {
         private TextView tvMsg;
 
+        @Override
+        protected int positionPattern() {
+            return ViewHolder.POSITION_PATTERN_LEFT_TOP;
+        }
+
+        @Override
+        protected boolean isCanAutoResetPositionPattern() {
+            return true;
+        }
+
         public ViewHolder(View itemView) {
             super(itemView);
             tvMsg = (TextView) itemView.findViewById(R.id.tvMsg);
@@ -76,7 +85,7 @@ public class FruitAdapter extends FruitView.Adapter {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(mContext, ((TestEntity)objects.get(position)).getName(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, ((TestEntity) objects.get(position)).getName(), Toast.LENGTH_SHORT).show();
                     objects.remove(position);
                     FruitAdapter.this.notifyItemRemoved(position);
                 }

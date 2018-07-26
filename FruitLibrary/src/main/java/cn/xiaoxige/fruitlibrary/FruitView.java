@@ -186,8 +186,12 @@ public class FruitView extends ViewGroup {
             }
             viewHolder.isEffective = true;
 
-            if (viewHolder.isCanAutoResetPositionPattern()) {
+            int itemViewPattern = viewHolder.itemViewPattern;
+
+            if (itemViewPattern == ViewHolder.POSITION_PATTERN_AUTO) {
                 viewHolder.position = autoDistributionPosition(position, viewHolder);
+            } else {
+                viewHolder.position = appointDistributionPosition(position, viewHolder);
             }
 
             mAttachedScrap.add(position, viewHolder);
@@ -228,10 +232,8 @@ public class FruitView extends ViewGroup {
         }
 
         private Point autoDistributionPosition(int position, ViewHolder viewHolder) {
-            Point point = null;
-            if (mLayoutManager != null) {
-                point = mLayoutManager.getChildrenPosition(position, viewHolder);
-            }
+            Point point;
+            point = tryDisjointByUser(position, viewHolder);
 
             if (point == null) {
                 View itemView = viewHolder.itemView;
@@ -246,6 +248,45 @@ public class FruitView extends ViewGroup {
             }
 
 
+            return point;
+        }
+
+        private Point appointDistributionPosition(int position, ViewHolder viewHolder) {
+            Point point;
+            point = tryDisjointByUser(position, viewHolder);
+
+            if (point == null) {
+
+                View itemView = viewHolder.itemView;
+                if (!viewHolder.isAreadyMeasure) {
+                    measureChild(itemView, 0, 0);
+                }
+                int effectiveWidth = mFruitViewWidth - itemView.getMeasuredWidth() - itemView.getPaddingLeft() - itemView.getPaddingRight();
+                int effectiveHeight = mFruitViewHeight - itemView.getMeasuredHeight() - itemView.getPaddingTop() - itemView.getPaddingBottom();
+                int itemViewPattern = viewHolder.itemViewPattern;
+
+                if (itemViewPattern == ViewHolder.POSITION_PATTERN_CENTER) {
+                    point = new Point((effectiveWidth + itemView.getMeasuredWidth()) / 2 - itemView.getMeasuredWidth() / 2, (effectiveHeight + itemView.getMeasuredHeight()) / 2 - itemView.getMeasuredHeight() / 2);
+                } else if (itemViewPattern == ViewHolder.POSITION_PATTERN_LEFT_TOP) {
+                    point = new Point(10, 10);
+                } else if (itemViewPattern == ViewHolder.POSITION_PATTERN_LEFT_BOTTOM) {
+                    point = new Point(10, effectiveHeight - itemView.getMeasuredHeight() - 10);
+                } else if (itemViewPattern == ViewHolder.POSITION_PATTERN_RIGHT_TOP) {
+                    point = new Point(effectiveWidth - itemView.getMeasuredWidth() - 10, 10);
+                } else if (itemViewPattern == ViewHolder.POSITION_PATTERN_RIGHT_BOTTOM) {
+                    point = new Point(effectiveWidth - itemView.getMeasuredWidth() - 10, effectiveHeight - itemView.getMeasuredHeight() - 10);
+                } else {
+                    point = autoDistributionPosition(position, viewHolder);
+                }
+            }
+            return point;
+        }
+
+        private Point tryDisjointByUser(int position, ViewHolder viewHolder) {
+            Point point = null;
+            if (mLayoutManager != null) {
+                point = mLayoutManager.getChildrenPosition(position, viewHolder);
+            }
             return point;
         }
 
@@ -455,11 +496,11 @@ public class FruitView extends ViewGroup {
             }
         }
 
-        boolean isCanAutoResetPositionPattern() {
+        protected boolean isCanAutoResetPositionPattern() {
             return true;
         }
 
-        int positionPattern() {
+        protected int positionPattern() {
             return POSITION_PATTERN_AUTO;
         }
 
