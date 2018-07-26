@@ -10,7 +10,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -29,7 +28,7 @@ public abstract class SimpleFruitView<T> extends ViewGroup {
      */
     private static final int TRY_MAX_FIND_DISJOINT_FREQUENCY = 500;
 
-    private static final int NUM_POLL_TIME = 800;
+    private static final int NUM_POLL_TIME = 50;
 
     private static final float EACH_STEP = (float) (Math.PI / 180);
 
@@ -195,15 +194,12 @@ public abstract class SimpleFruitView<T> extends ViewGroup {
             float peakValue = viewHolder.peakValue;
             float step = viewHolder.step;
             float stepProgress = viewHolder.stepProgress;
-            view.setTranslationY((float) (peakValue * Math.sin( stepProgress)));
+            view.setTranslationY((float) (peakValue * Math.sin(peakValue * stepProgress * step)));
             stepProgress += EACH_STEP;
             if (stepProgress > 2 * Math.PI) {
                 stepProgress = 0;
             }
             viewHolder.stepProgress = stepProgress;
-            if(i == 1){
-                Log.e("TAG", "fdjasfkljdlas = " + stepProgress);
-            }
         }
     }
 
@@ -392,7 +388,7 @@ public abstract class SimpleFruitView<T> extends ViewGroup {
         return SimpleViewHolder.POSITION_PATTERN_AUTO;
     }
 
-    private float getStep(int index, T data) {
+    protected float getStep(int index, T data) {
         return 2;
     }
 

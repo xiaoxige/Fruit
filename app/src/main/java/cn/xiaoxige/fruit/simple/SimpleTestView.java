@@ -54,6 +54,16 @@ public class SimpleTestView extends SimpleFruitView<SimpleEntity> {
     }
 
     @Override
+    protected float getStep(int index, SimpleEntity data) {
+        return index + 1;
+    }
+
+    @Override
+    protected float getPeakValue(int index, SimpleEntity data) {
+        return super.getPeakValue(index, data);
+    }
+
+    @Override
     protected Animator getQuitAnimation(int position, SimpleEntity simpleEntity, View view) {
         ObjectAnimator quitAlphaAnimator = ObjectAnimator.ofFloat(view, "alpha", 1f, 0f);
         ObjectAnimator quitScaleXAnimator = ObjectAnimator.ofFloat(view, "scaleX", 1f, 0f);
