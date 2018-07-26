@@ -10,7 +10,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.xiaoxige.fruitlibrary.FruitView;
+import cn.xiaoxige.fruitlibrary.complex.FruitView;
 
 /**
  * @author by zhuxiaoan on 2018/7/24 0024.

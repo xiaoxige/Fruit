@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import cn.xiaoxige.fruitlibrary.DefaultFruitAnimation;
-import cn.xiaoxige.fruitlibrary.DefaultFruitLayoutManager;
-import cn.xiaoxige.fruitlibrary.FruitView;
+import cn.xiaoxige.fruitlibrary.complex.DefaultFruitAnimation;
+import cn.xiaoxige.fruitlibrary.complex.DefaultFruitLayoutManager;
+import cn.xiaoxige.fruitlibrary.complex.FruitView;
 
 public class MainActivity extends Activity {
 
