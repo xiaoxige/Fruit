@@ -1,10 +1,12 @@
 package cn.xiaoxige.fruit;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,10 +33,10 @@ public class FruitAdapter extends FruitView.Adapter {
     }
 
     public void addData(Object o) {
+        int size = this.objects.size();
         this.objects.add(o);
-        notifyItemInserted(this.objects.size() - 1);
+        notifyItemInserted(size);
     }
-
 
     @Override
     public int getItemCount() {
@@ -53,6 +55,9 @@ public class FruitAdapter extends FruitView.Adapter {
 //        Log.e("TAG", "position = " + position);
     }
 
+    public List<Object> getObjects() {
+        return objects;
+    }
 
     class ViewHolder extends FruitView.ViewHolder {
         private TextView tvMsg;
@@ -63,13 +68,15 @@ public class FruitAdapter extends FruitView.Adapter {
         }
 
         public void bindData(int position) {
-            tvMsg.setText("小稀革" + objects.get(position));
+            TestEntity testEntity = (TestEntity) objects.get(position);
+            tvMsg.setText(testEntity.getName());
         }
 
         public void registerListener(final int position) {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Toast.makeText(mContext, ((TestEntity)objects.get(position)).getName(), Toast.LENGTH_SHORT).show();
                     objects.remove(position);
                     FruitAdapter.this.notifyItemRemoved(position);
                 }

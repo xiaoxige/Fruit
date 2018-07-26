@@ -152,7 +152,7 @@ public class FruitView extends ViewGroup {
 
             int size = mAttachedScrap.size();
             for (int i = size - 1; i >= 0; i--) {
-                onDelData(i);
+                onDelData(i, false);
             }
             removeAllViews();
 
@@ -164,8 +164,10 @@ public class FruitView extends ViewGroup {
         }
 
         void onInvalidData(int position) {
+            ViewHolder viewHolder = mAttachedScrap.get(position);
+            viewHolder.isAreadyMeasure = false;
             //noinspection unchecked
-            mAdapter.onBindViewHolder(mAttachedScrap.get(position), position);
+            mAdapter.onBindViewHolder(viewHolder, position);
         }
 
         void insertItem(int position) {
@@ -193,7 +195,7 @@ public class FruitView extends ViewGroup {
             mAdapter.onBindViewHolder(viewHolder, position);
         }
 
-        void onDelData(int position) {
+        void onDelData(int position, boolean isNeedReBindData) {
 //            ViewHolder viewHolder = mAttachedScrap.get(position);
 //            if (!viewHolder.isEffective) {
 //                viewHolder.itemView.setOnClickListener(null);
@@ -213,6 +215,9 @@ public class FruitView extends ViewGroup {
                 holder.reset();
             }
 
+            if (!isNeedReBindData) {
+                return;
+            }
             int size = mAttachedScrap.size();
             position = Math.max(0, position - 1);
             for (int i = position; i < size; i++) {
@@ -443,6 +448,7 @@ public class FruitView extends ViewGroup {
         }
 
         public void reset() {
+            this.isAreadyMeasure = false;
             this.isEffective = false;
             if (isCanAutoResetPositionPattern()) {
                 itemViewPattern = POSITION_PATTERN_AUTO;
@@ -586,7 +592,7 @@ public class FruitView extends ViewGroup {
         @Override
         void onItemRemoved(int position) {
             mAnimation.onDelData(position);
-            mFruit.onDelData(position);
+            mFruit.onDelData(position, true);
         }
     }
 
