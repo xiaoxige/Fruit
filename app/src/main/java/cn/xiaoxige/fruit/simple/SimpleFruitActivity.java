@@ -21,6 +21,7 @@ public class SimpleFruitActivity extends Activity {
     private SimpleTestView simpleFruitView;
 
     private Button btnAdd;
+    private Button btnChange;
 
     private int index = 100;
 
@@ -31,6 +32,7 @@ public class SimpleFruitActivity extends Activity {
         btnAdd = (Button) findViewById(R.id.btnAdd);
 
         simpleFruitView = (SimpleTestView) findViewById(R.id.simpleFruitView);
+        btnChange = (Button)findViewById(R.id.btnChange);
 
         simpleFruitView.post(new Runnable() {
             @Override
@@ -46,7 +48,8 @@ public class SimpleFruitActivity extends Activity {
         simpleFruitView.setListener(new SimpleFruitView.OnItemClickListener<SimpleEntity>() {
             @Override
             public void onClick(View v, int position, SimpleEntity simpleEntity) {
-                simpleFruitView.remove(position);
+//                simpleFruitView.remove(position);
+                simpleFruitView.remove(simpleEntity);
             }
         });
 
@@ -57,6 +60,12 @@ public class SimpleFruitActivity extends Activity {
                 datas.add(new SimpleEntity(index, "小稀革" + index));
                 index++;
                 simpleFruitView.add(datas, true);
+            }
+        });
+        btnChange.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                simpleFruitView.change(0, new SimpleEntity(++index, "朱肖安" + index));
             }
         });
     }

@@ -110,9 +110,9 @@ public abstract class SimpleFruitView<T> extends ViewGroup {
             viewHolder.step = getStep(index, data);
 
             handlerAdd(index, data, view);
-            viewHolder.position = disjointPosint(viewHolder.pattern, view);
-            bindData(view, index, data);
             view.setTag(viewHolder);
+            bindData(view, index, data);
+            viewHolder.position = disjointPosint(viewHolder.pattern, view);
 
             registerListener(index, view);
 
@@ -211,7 +211,7 @@ public abstract class SimpleFruitView<T> extends ViewGroup {
         }
     }
 
-    private void handlerRemove(int position, final View view) {
+    private void handlerRemove(final int position, final View view) {
         //noinspection unchecked
         SimpleViewHolder<T> viewHolder = (SimpleViewHolder<T>) view.getTag();
         Animator quitAnimation = getQuitAnimation(position, viewHolder.t, view);
@@ -222,10 +222,18 @@ public abstract class SimpleFruitView<T> extends ViewGroup {
                 public void onAnimationEnd(Animator animation) {
                     super.onAnimationEnd(animation);
                     removeView(view);
+                    int childCount = getChildCount();
+                    for (int i = position; i < childCount - 1; i++) {
+                        registerListener(i, getChildAt(i));
+                    }
                 }
             });
         } else {
             removeView(view);
+            int childCount = getChildCount();
+            for (int i = position; i < childCount - 1; i++) {
+                registerListener(i, getChildAt(i));
+            }
         }
     }
 
